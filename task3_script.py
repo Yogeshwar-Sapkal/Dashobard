@@ -71,7 +71,7 @@ st.plotly_chart(fig)
 
 
 # Step 5: Integrate GenAI Query (Using OpenAI API)
-genai.configure(api_key="AIzaSyBLwMYymhJRNyJtJK9ah_s9R_WMRpEVuns") # Replace with actual API Key
+genai.configure(api_key="AIzaSyD5ZXQnhHypL6lbjvi94GQIfcfmGc0dC2U") # Replace with actual API Key
 def generate_insight(user_question, summary):
     """Generate AI insights using Google Gemini API with full dashboard context."""
     model = genai.GenerativeModel("gemini-1.5-pro")  # Ensure the correct model
