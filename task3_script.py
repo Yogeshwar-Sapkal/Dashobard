@@ -8,6 +8,9 @@ import google.generativeai as genai
 df1 = pd.read_csv("delivered_properties_mar1.csv")
 df2 = pd.read_csv("delivered_properties_mar2.csv")
 
+df3 = pd.read_csv("leaseup_market1.csv")
+df4 = pd.read_csv("leaseup_market2.csv")
+
 # Step 4: Build Interactive Dashboard in Streamlit
 st.title("GenAI-Enhanced Interactive Dashboard")
 st.subheader("Property Lease-Up Analysis")
@@ -48,6 +51,22 @@ fig2 = px.bar(city2_counts, x='City', y='Number of Properties',
 # st.subheader("Texas Property Delivery Analysis")
 st.plotly_chart(fig1)
 st.plotly_chart(fig2)
+
+combined_df = pd.DataFrame({
+    'LeaseupTime': np.concatenate([df3['LeaseupTime'], df4['LeaseupTime']]),
+    'Market': ['Market 1'] * len(df3['LeaseupTime']) + ['Market 2'] * len(df4['LeaseupTime'])
+})
+
+# Create an interactive boxplot using Plotly
+fig = px.box(combined_df, x='Market', y='LeaseupTime', color='Market',
+             title="Distribution of Lease-Up Time Across Markets",
+             labels={'LeaseupTime': 'Lease-Up Time (Months)', 'Market': 'Market'},
+             boxmode='group', 
+             template="plotly_white")
+
+# Display the interactive chart in Streamlit
+st.subheader("Interactive Lease-Up Time Distribution")
+st.plotly_chart(fig)
 
 
 # Step 5: Integrate GenAI Query (Using OpenAI API)
