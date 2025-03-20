@@ -3,3 +3,4 @@ plotly
 matplotlib
 google-generativeai
 pandas
+numpy
