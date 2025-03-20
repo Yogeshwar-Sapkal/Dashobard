@@ -72,19 +72,45 @@ st.plotly_chart(fig)
 
 # Step 5: Integrate GenAI Query (Using OpenAI API)
 genai.configure(api_key="AIzaSyBLwMYymhJRNyJtJK9ah_s9R_WMRpEVuns") # Replace with actual API Key
-def generate_insight(question, data_summary):
-    """Generate insights using Google Gemini API."""
-    model = genai.GenerativeModel("gemini-1.5-pro")
+def generate_insight(user_question, summary):
+    """Generate AI insights using Google Gemini API with full dashboard context."""
+    model = genai.GenerativeModel("gemini-1.5-pro")  # Ensure the correct model
+
+    prompt = f"""
+    You are an AI assistant helping users analyze a real estate dashboard. 
+    The dashboard contains multiple datasets and visualizations related to property markets.
     
-    response = model.generate_content(f"Analyze the following data summary and answer: {question}\n\n{data_summary}")
+    Here are the key insights available:
     
+    **Dataset 1 - Market 1 Properties:**
+    {df1.describe().to_string()}
+    
+    **Dataset 2 - Market 2 Properties:**
+    {df2.describe().to_string()}
+    
+    **Dataset 3 - Market 1 Properties:**
+    {df3.describe().to_string()}
+
+    **Dataset 4 - Market 2 Properties:**
+    {df3.describe().to_string()}
+
+    **Key Visualizations:**
+    - A bar chart showing the number of delivered properties per city.
+    - A boxplot showing lease-up time distribution across different markets.
+    
+    Answer the following question based on all available insights:
+    
+    **User Question:** {user_question}
+    """
+
+    response = model.generate_content(prompt)
     return response.text
 
 st.subheader("Ask the AI")
-user_question = st.text_input("Enter your question about the dataset:")
-if user_question:
-    insight = generate_insight(user_question, df1.describe().to_string())
-    st.write(insight)
+user_question = st.text_input("Enter your question about the dataset, charts, or insights:")
 
+if user_question:
+    insight = generate_insight(user_question, summary="")  # Passing full dashboard context
+    st.write(insight)
 
 
