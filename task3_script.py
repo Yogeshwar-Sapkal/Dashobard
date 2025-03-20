@@ -10,7 +10,7 @@ df2 = pd.read_csv("delivered_properties_mar2.csv")
 
 # Step 4: Build Interactive Dashboard in Streamlit
 st.title("GenAI-Enhanced Interactive Dashboard")
-st.subheader("Top City for A+ Assets")
+st.subheader("Property Lease-Up Analysis")
 st.write(df1.head())
 st.write(df2.head())
 
@@ -27,33 +27,27 @@ st.write(df2.head())
 #     fig = px.line(df, x=x_axis, y=y_axis)
 
 # st.plotly_chart(fig)
-city1 = df1['City'].value_counts()
-city2 = df2['City'].value_counts()
+city1_counts = df1['City'].value_counts().reset_index()
+city1_counts.columns = ['City', 'Number of Properties']
 
-# Create a Matplotlib figure
-fig, axes = plt.subplots(1, 2, figsize=(14, 6))
+city2_counts = df2['City'].value_counts().reset_index()
+city2_counts.columns = ['City', 'Number of Properties']
 
-# First Bar Chart
-axes[0].bar(city1.index, city1.values, color='royalblue')
-axes[0].set_xlabel("City", fontsize=12)
-axes[0].set_ylabel("Number of Properties Delivered", fontsize=12)
-axes[0].set_title("Number of Properties Delivered In Texas (LU & UC/LU)", fontsize=14)
-axes[0].tick_params(axis='x', rotation=55)  # Rotate labels for better readability
-axes[0].grid(axis='y', linestyle="--", alpha=0.7)
+# Create interactive bar charts using Plotly
+fig1 = px.bar(city1_counts, x='City', y='Number of Properties', 
+              title="Number of Properties Delivered In Texas (LU & UC/LU)",
+              labels={'City': 'City', 'Number of Properties': 'Delivered Properties'},
+              color='Number of Properties', color_continuous_scale='blues')
 
-# Second Bar Chart
-axes[1].bar(city2.index, city2.values, color='tomato')
-axes[1].set_xlabel("City", fontsize=12)
-axes[1].set_ylabel("Number of Properties Delivered", fontsize=12)
-axes[1].set_title("Number of Properties Delivered In Texas (Second Dataset)", fontsize=14)
-axes[1].tick_params(axis='x', rotation=55)
-axes[1].grid(axis='y', linestyle="--", alpha=0.7)
+fig2 = px.bar(city2_counts, x='City', y='Number of Properties', 
+              title="Number of Properties Delivered In Ohio (LU & UC/LU)",
+              labels={'City': 'City', 'Number of Properties': 'Delivered Properties'},
+              color='Number of Properties', color_continuous_scale='reds')
 
-# Adjust layout
-plt.tight_layout()
-
-# **Embed Matplotlib figure in Streamlit**
-st.pyplot(fig)
+# Display the interactive charts in Streamlit
+# st.subheader("Texas Property Delivery Analysis")
+st.plotly_chart(fig1)
+st.plotly_chart(fig2)
 
 
 # Step 5: Integrate GenAI Query (Using OpenAI API)
