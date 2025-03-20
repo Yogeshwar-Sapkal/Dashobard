@@ -5,8 +5,8 @@ import plotly.express as px
 import google.generativeai as genai
 
 # Step 1: Load the dataset
-df1 = pd.read_csv("/delivered_properties_mar1.csv")
-df2 = pd.read_csv("/delivered_properties_mar2.csv")
+df1 = pd.read_csv("delivered_properties_mar1.csv")
+df2 = pd.read_csv("delivered_properties_mar2.csv")
 
 # Step 4: Build Interactive Dashboard in Streamlit
 st.title("GenAI-Enhanced Interactive Dashboard")
